@@ -12,4 +12,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     // 작성자(User)가 쓴 댓글 조회 (마이페이지)
     List<Comment> findAllByWriter_UserId(Long writerId, Sort sort);
+
+    // [New] 특정 게시글에 달린 댓글 전체 삭제 (게시글 삭제 시 사용)
+    void deleteAllByPost_PostId(Long postId);
 }
