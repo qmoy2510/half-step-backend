@@ -25,16 +25,24 @@ public class AuthController {
 
     // 2. 회원가입
     @PostMapping("/signup")
-    public ResponseEntity<Long> signup(@RequestBody AuthDto.SignupRequest request) {
+    public ResponseEntity<AuthDto.SignupResponse> signup(@RequestBody AuthDto.SignupRequest request) {
         Long userId = authService.signup(request);
-        // 201 Created 상태코드 반환
-        return ResponseEntity.status(HttpStatus.CREATED).body(userId);
+
+        // JSON 객체 { "userId": 1 } 형태로 변환하여 반환
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(AuthDto.SignupResponse.builder()
+                        .userId(userId)
+                        .build());
     }
 
-    // 3. 아이디 중복 확인
+    // 3. 아이디 중복 확인 (수정됨)
     @GetMapping("/check-id")
-    public ResponseEntity<Boolean> checkLoginId(@RequestParam String loginId) {
+    public ResponseEntity<AuthDto.CheckIdResponse> checkLoginId(@RequestParam String loginId) {
         boolean isAvailable = authService.checkLoginId(loginId);
-        return ResponseEntity.ok(isAvailable);
+
+        // 명세서에 맞춰 { "isAvailable": true/false } 형태의 JSON 객체 반환
+        return ResponseEntity.ok(AuthDto.CheckIdResponse.builder()
+                .isAvailable(isAvailable)
+                .build());
     }
 }
