@@ -39,6 +39,7 @@ public class SecurityConfig {
                 // URL별 권한 관리
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll() // 로그인, 회원가입은 누구나 접근 가능
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll() // Swagger 경로 허용
                         .anyRequest().authenticated() // 그 외는 인증 필요
                 )
                 // JWT 필터 추가
