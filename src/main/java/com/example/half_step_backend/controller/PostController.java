@@ -41,6 +41,22 @@ public class PostController {
         return ResponseEntity.ok(response);
     }
 
+    // [New] 게시글 수정
+    @PatchMapping("/{postId}")
+    public ResponseEntity<PostDto.PostUpdateResponse> updatePost(
+            @PathVariable Long postId,
+            @RequestBody PostDto.PostUpdateRequest request) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentLoginId = authentication.getName();
+
+        Long updatedPostId = postService.updatePost(postId, currentLoginId, request);
+
+        return ResponseEntity.ok(PostDto.PostUpdateResponse.builder()
+                .postId(updatedPostId)
+                .build());
+    }
+
     @DeleteMapping("/{postId}")
     public ResponseEntity<PostDto.PostDeleteResponse> deletePost(@PathVariable Long postId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -10,7 +10,6 @@ import java.util.List;
 
 public class PostDto {
 
-    // [Rename] CreateRequest -> PostCreateRequest
     @Getter
     @NoArgsConstructor
     public static class PostCreateRequest {
@@ -20,12 +19,29 @@ public class PostDto {
         private Integer rewardSteps;
     }
 
-    // [Rename] CreateResponse -> PostCreateResponse
     @Getter
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     public static class PostCreateResponse {
+        private Long postId;
+    }
+
+    // [New] 게시글 수정 Request
+    @Getter
+    @NoArgsConstructor
+    public static class PostUpdateRequest {
+        private String title;
+        private String content;
+        private Integer temperature;
+    }
+
+    // [New] 게시글 수정 Response
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PostUpdateResponse {
         private Long postId;
     }
 
@@ -74,7 +90,6 @@ public class PostDto {
         private String level;
     }
 
-    // [Rename] CommentDto -> PostCommentDto (충돌 방지)
     @Getter
     @Builder
     @AllArgsConstructor

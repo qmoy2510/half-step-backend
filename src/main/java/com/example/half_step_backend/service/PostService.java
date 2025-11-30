@@ -23,9 +23,7 @@ public class PostService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
 
-    /**
-     * 게시글 작성
-     */
+    // ... createPost 메소드 생략 ... (기존 동일)
     @Transactional
     public Long createPost(String loginId, PostDto.PostCreateRequest request) {
         User writer = userRepository.findByLoginId(loginId)
@@ -44,9 +42,6 @@ public class PostService {
         return postRepository.save(post).getPostId();
     }
 
-    /**
-     * 게시글 전체 목록 조회
-     */
     public PostDto.PostListResponse getAllPosts() {
         List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
 
@@ -67,9 +62,6 @@ public class PostService {
                 .build();
     }
 
-    /**
-     * 게시글 상세 조회
-     */
     public PostDto.PostDetailResponse getPostDetail(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
@@ -100,9 +92,23 @@ public class PostService {
                 .build();
     }
 
-    /**
-     * 게시글 삭제
-     */
+    // [New] 게시글 수정
+    @Transactional
+    public Long updatePost(Long postId, String loginId, PostDto.PostUpdateRequest request) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
+
+        // 작성자 본인 확인
+        if (!post.getWriter().getLoginId().equals(loginId)) {
+            throw new IllegalArgumentException("작성자 본인만 수정할 수 있습니다.");
+        }
+
+        // 업데이트 수행
+        post.update(request.getTitle(), request.getContent(), request.getTemperature());
+
+        return post.getPostId();
+    }
+
     @Transactional
     public void deletePost(Long postId, String loginId) {
         Post post = postRepository.findById(postId)

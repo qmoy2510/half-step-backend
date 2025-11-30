@@ -27,7 +27,7 @@ public class Post extends BaseTimeEntity {
     @Column(name = "title", nullable = false, length = 100)
     private String title;
 
-    @Column(name = "content", nullable = false, columnDefinition = "CLOB") // Oracle Text 타입
+    @Column(name = "content", nullable = false, columnDefinition = "CLOB")
     private String content;
 
     @Column(name = "temperature", nullable = false)
@@ -55,5 +55,12 @@ public class Post extends BaseTimeEntity {
 
     public void complete() {
         this.isCompleted = true;
+    }
+
+    // [New] 게시글 수정 메소드 (null이 아닌 값만 변경)
+    public void update(String title, String content, Integer temperature) {
+        if (title != null) this.title = title;
+        if (content != null) this.content = content;
+        if (temperature != null) this.temperature = temperature;
     }
 }
