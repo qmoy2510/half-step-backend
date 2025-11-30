@@ -27,7 +27,7 @@ public class PostService {
      * 게시글 작성
      */
     @Transactional
-    public Long createPost(String loginId, PostDto.CreateRequest request) {
+    public Long createPost(String loginId, PostDto.PostCreateRequest request) {
         User writer = userRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
@@ -74,8 +74,8 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
 
-        List<PostDto.CommentDto> commentDtos = commentRepository.findAllByPost_PostId(postId).stream()
-                .map(comment -> PostDto.CommentDto.builder()
+        List<PostDto.PostCommentDto> commentDtos = commentRepository.findAllByPost_PostId(postId).stream()
+                .map(comment -> PostDto.PostCommentDto.builder()
                         .commentId(comment.getCommentId())
                         .writerName(comment.getWriter().getName())
                         .writerLevel("아기새")
@@ -101,22 +101,18 @@ public class PostService {
     }
 
     /**
-     * [New] 게시글 삭제
+     * 게시글 삭제
      */
     @Transactional
     public void deletePost(Long postId, String loginId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
 
-        // 작성자 본인 확인
         if (!post.getWriter().getLoginId().equals(loginId)) {
             throw new IllegalArgumentException("작성자 본인만 삭제할 수 있습니다.");
         }
 
-        // 게시글에 달린 댓글 먼저 삭제 (FK 제약조건 방지)
         commentRepository.deleteAllByPost_PostId(postId);
-
-        // 게시글 삭제
         postRepository.delete(post);
     }
 }

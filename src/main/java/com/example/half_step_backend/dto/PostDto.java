@@ -10,26 +10,25 @@ import java.util.List;
 
 public class PostDto {
 
-    // 1. 게시글 작성 Request
+    // [Rename] CreateRequest -> PostCreateRequest
     @Getter
     @NoArgsConstructor
-    public static class CreateRequest {
+    public static class PostCreateRequest {
         private String title;
         private String content;
         private Integer temperature;
         private Integer rewardSteps;
     }
 
-    // 2. 게시글 작성 Response
+    // [Rename] CreateResponse -> PostCreateResponse
     @Getter
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class CreateResponse {
+    public static class PostCreateResponse {
         private Long postId;
     }
 
-    // 3. 게시글 목록 조회 Response
     @Getter
     @Builder
     @AllArgsConstructor
@@ -38,7 +37,6 @@ public class PostDto {
         private List<PostSummary> content;
     }
 
-    // 목록 내부의 요약 정보
     @Getter
     @Builder
     @AllArgsConstructor
@@ -53,7 +51,6 @@ public class PostDto {
         private LocalDateTime createdAt;
     }
 
-    // 4. 게시글 상세 조회 Response
     @Getter
     @Builder
     @AllArgsConstructor
@@ -65,7 +62,7 @@ public class PostDto {
         private String content;
         private Integer temperature;
         private Integer rewardSteps;
-        private List<CommentDto> comments;
+        private List<PostCommentDto> comments;
     }
 
     @Getter
@@ -77,11 +74,12 @@ public class PostDto {
         private String level;
     }
 
+    // [Rename] CommentDto -> PostCommentDto (충돌 방지)
     @Getter
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class CommentDto {
+    public static class PostCommentDto {
         private Long commentId;
         private String writerName;
         private String writerLevel;
@@ -89,12 +87,11 @@ public class PostDto {
         private Boolean isSelected;
     }
 
-    // [New] 게시글 삭제 Response
     @Getter
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class DeleteResponse {
+    public static class PostDeleteResponse {
         private String message;
     }
 }
